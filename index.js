@@ -26,6 +26,14 @@ app.post("/webhook", (req, res) => {
   });
 });
 
+// Teste simples via navegador
+app.get("/test-produtor", (req, res) => {
+  res.json({
+    profile: "produtor",
+    reply: "Me conta uma coisa primeiro... qual o peso do animal e como está o pasto hoje?"
+  });
+});
+
 // Rota principal de conversa
 app.post("/chat", (req, res) => {
   const { profile, message } = req.body;
