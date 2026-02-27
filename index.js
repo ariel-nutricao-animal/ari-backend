@@ -1,6 +1,5 @@
-
-import express from "express";
-import OpenAI from "openai";
+const express = require("express");
+const OpenAI = require("openai");
 
 const app = express();
 app.use(express.json());
@@ -49,6 +48,7 @@ app.get("/test-produtor", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 8080;
+
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log("Servidor rodando na porta " + PORT);
 });
