@@ -1,12 +1,14 @@
 {
   "name": "ari-backend",
   "version": "1.0.0",
-  "description": "Backend do atendente Ari - Ariel Nutrição Animal",
+  "description": "Backend Ariel Nutrição Animal",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "openai": "^4.0.0"
   }
 }
