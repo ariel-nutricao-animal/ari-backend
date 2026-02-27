@@ -26,6 +26,37 @@ app.post("/webhook", (req, res) => {
   });
 });
 
+// Rota principal de conversa
+app.post("/chat", (req, res) => {
+  const { profile, message } = req.body;
+
+  if (!profile || !message) {
+    return res.status(400).json({
+      error: "profile e message são obrigatórios"
+    });
+  }
+
+  let response;
+
+  if (profile === "produtor") {
+    response = `Me conta uma coisa primeiro... qual o peso do animal e como está o pasto hoje?`;
+  } 
+  else if (profile === "tecnico") {
+    response = `Qual o nível de PB e energia da dieta atual? Está trabalhando com qual meta de GMD?`;
+  } 
+  else if (profile === "estudante") {
+    response = `Você está estudando qual fase da nutrição animal? Crescimento, engorda ou lactação?`;
+  } 
+  else if (profile === "comprar") {
+    response = `Perfeito. Me passa sua cidade e quantidade de animais que eu já direciono certinho pra você.`;
+  } 
+  else {
+    response = `Antes de começarmos, você é produtor, técnico, estudante ou quer comprar?`;
+  }
+
+  res.json({ reply: response });
+});
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
