@@ -1,21 +1,28 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send(`
-    <h1>Ariel Nutrição Animal</h1>
-    <h2>Atendente Ari online 🦁</h2>
-    <p>Sistema em construção...</p>
-  `);
+// Rota principal
+app.get("/", (req, res) => {
+  res.send("Ariel Nutrição Animal - Atendente Ari online 🦁");
 });
 
-app.post('/chat', (req, res) => {
-  const { mensagem } = req.body;
+// Rota de saúde
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "ari-backend",
+    timestamp: new Date()
+  });
+});
 
-  res.json({
-    resposta: "Shalom! Sou o Ari, atendente da Ariel Nutrição Animal. Como posso ajudar você hoje?"
+// Rota webhook (futuro WhatsApp)
+app.post("/webhook", (req, res) => {
+  console.log("Webhook recebido:", req.body);
+
+  res.status(200).json({
+    received: true
   });
 });
 
