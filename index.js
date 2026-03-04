@@ -147,16 +147,17 @@ app.post("/diagnostico", async (req, res) => {
 
   try {
 
-    const { cidade, tipo, peso, pasto, objetivo } = req.body;
+    const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
 
     const pergunta = `
 content: `
-Produtor: ${nome}
-Cidade: ${cidade}
-Tipo de criação: ${tipo}
-Peso médio: ${peso} kg
-Condição do pasto: ${pasto}
-Objetivo: ${objetivo}
+<div id="chatBox" style="display:none; margin-top:20px;">
+<textarea id="pergunta" placeholder="Pergunte algo ao Ari..." style="width:100%; height:80px;"></textarea>
+
+<button onclick="continuarConversa()" style="margin-top:10px;">
+Continuar conversa
+</button>
+</div>
 
 Faça o diagnóstico técnico seguindo as regras do Ari.
 `
