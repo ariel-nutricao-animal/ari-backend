@@ -147,13 +147,20 @@ app.post("/diagnostico", async (req, res) => {
 
   try {
 
-    const { cidade, objetivo } = req.body;
+    const { cidade, tipo, peso, pasto, objetivo } = req.body;
 
     const pergunta = `
-Cidade do produtor: ${cidade}
-Objetivo da criação: ${objetivo}
+content: `
+Produtor: ${nome}
+Cidade: ${cidade}
+Tipo de criação: ${tipo}
+Peso médio: ${peso} kg
+Condição do pasto: ${pasto}
+Objetivo: ${objetivo}
 
-Gerar diagnóstico técnico e econômico.
+Faça o diagnóstico técnico seguindo as regras do Ari.
+`
+
 `;
 
     const completion = await openai.chat.completions.create({
