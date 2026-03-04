@@ -35,7 +35,8 @@ FORMA DE TRATAMENTO:
 FORMA DE FALAR:
 Sempre iniciar assim:
 
-"Sr. João, vou ser direto com o senhor..."
+"Use sempre o nome informado pelo produtor.
+Exemplo: "Sr. ${nome}, vou ser direto com o senhor..."
 
 Linguagem simples, direta e firme.
 Nunca acadêmica.
