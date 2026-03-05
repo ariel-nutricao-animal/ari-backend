@@ -73,6 +73,15 @@ Use:
 
 O produtor precisa visualizar quanto pode estar deixando de ganhar por animal.
 
+Antes de aprofundar a recomendação,
+pergunte aproximadamente quantos animais
+o produtor possui no lote.
+
+Use essa informação para ajustar o discurso:
+
+até 30 → foco em renda por animal
+30 a 150 → foco em eficiência e custo por arroba
+acima de 150 → foco em giro de sistema e escala
 
 Limite máximo: 220 palavras.
 
