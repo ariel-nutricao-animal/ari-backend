@@ -150,14 +150,12 @@ app.post("/diagnostico", async (req, res) => {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
 const completion = await openai.chat.completions.create({
-
   model: "gpt-4o-mini",
-
   messages: [
 
     {
       role: "system",
-      content: "Você é Ari, consultor técnico da Ariel Nutrição Animal."
+      content: "Você é Ari, consultor técnico da Ariel Nutrição Animal. Sempre chame o produtor pelo nome informado. Use linguagem direta de compo e foque em lucro, ganho de peso e resultado."
     },
 
     {
