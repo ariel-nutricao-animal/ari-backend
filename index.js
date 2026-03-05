@@ -148,7 +148,7 @@ app.post("/diagnostico", async (req, res) => {
   try {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
-
+    console.log("Nome recebido:", nome);
     const completion = await openai.chat.completions.create({
 
       model: "gpt-4o-mini",
