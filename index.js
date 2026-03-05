@@ -70,7 +70,7 @@ REGRAS COMERCIAIS:
 ESTRUTURA DA RESPOSTA:
 
 1 Diagnóstico direto
-2 Simulação numérica
+2 Simulação numérica demonstrando o cálculo com os numeros fornecidos pelo cliente
 3 Impacto financeiro
 4 Urgência (tempo parado é custo)
 5 Caminho para melhorar
@@ -149,7 +149,16 @@ app.post("/diagnostico", async (req, res) => {
   try {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
+content: `
+Produtor: ${nome}
+Cidade: ${cidade}
+Tipo: ${tipo}
+Peso médio: ${peso} kg
+Condição do pasto: ${pasto}
+Objetivo: ${objetivo}
 
+Responda chamando o produtor de Sr. ${nome}.
+`
     const pergunta = `
 content: `
 <div id="chatBox" style="display:none; margin-top:20px;">
