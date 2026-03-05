@@ -149,7 +149,20 @@ app.post("/diagnostico", async (req, res) => {
   try {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
-content: `
+const completion = await openai.chat.completions.create({
+
+  model: "gpt-4o-mini",
+
+  messages: [
+
+    {
+      role: "system",
+      content: "Você é Ari, consultor técnico da Ariel Nutrição Animal."
+    },
+
+    {
+      role: "user",
+      content: `
 Produtor: ${nome}
 Cidade: ${cidade}
 Tipo: ${tipo}
@@ -159,10 +172,11 @@ Objetivo: ${objetivo}
 
 Responda chamando o produtor de Sr. ${nome}.
 `
-    const pergunta = `
-content: `
-<div id="chatBox" style="display:none; margin-top:20px;">
-<textarea id="pergunta" placeholder="Pergunte algo ao Ari..." style="width:100%; height:80px;"></textarea>
+    }
+
+  ]
+
+});
 
 <button onclick="continuarConversa()" style="margin-top:10px;">
 Continuar conversa
