@@ -248,10 +248,13 @@ Sempre responda de forma prática e objetiva.
 
     });
 
-   const resposta = completion.choices[0].message.content;
+   const texto = completion.choices[0].message.content;
+
+// remove qualquer "Sr. João" ou "Sr. ..." no começo (caso o modelo coloque)
+const textoSemNome = texto.replace(/^Sr\.\s+\w+,\s*/i, '');
 
 res.json({
-  reply: `Sr. ${nome},\n\n${resposta}`
+  reply: `Sr. ${nome},\n\n${textoSemNome}`
 });
 
   } catch (error) {
