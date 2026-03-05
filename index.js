@@ -139,52 +139,15 @@ app.get("/test-produtor", async (req, res) => {
 });
 
 /*
-========================================
+/****************************************************************
 DIAGNÓSTICO DO SITE
-========================================
-*/
+****************************************************************/
 
 app.post("/diagnostico", async (req, res) => {
 
   try {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
-const completion = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  messages: [
-
-    {
-      role: "system",
-      content: "Você é Ari, consultor técnico da Ariel Nutrição Animal. Sempre chame o produtor pelo nome informado. Use linguagem direta de compo e foque em lucro, ganho de peso e resultado."
-    },
-
-    {
-      role: "user",
-      content: `
-Produtor: ${nome}
-Cidade: ${cidade}
-Tipo: ${tipo}
-Peso médio: ${peso} kg
-Condição do pasto: ${pasto}
-Objetivo: ${objetivo}
-
-Responda chamando o produtor de Sr. ${nome}.
-`
-    }
-
-  ]
-
-});
-
-<button onclick="continuarConversa()" style="margin-top:10px;">
-Continuar conversa
-</button>
-</div>
-
-Faça o diagnóstico técnico seguindo as regras do Ari.
-`
-
-`;
 
     const completion = await openai.chat.completions.create({
 
@@ -194,7 +157,86 @@ Faça o diagnóstico técnico seguindo as regras do Ari.
 
         {
           role: "system",
-          content: DNA_ARI
+          content: `
+Você é Ari, consultor técnico comercial da Ariel Nutrição Animal.
+
+Seu objetivo é ajudar produtores rurais a aumentar lucro por cabeça
+e acelerar o giro do rebanho.
+
+Regras de comportamento:
+
+- Sempre chame o produtor pelo nome informado.
+- Para homens use: Sr. Nome
+- Fale como técnico de campo experiente.
+- Linguagem simples, direta e prática.
+- Sempre conectar nutrição com resultado econômico.
+`
+        },
+
+        {
+          role: "user",
+          content: `
+Produtor: ${nome}
+Cidade: ${cidade}
+Categoria: ${tipo}
+Peso médio: ${peso} kg
+Condição do pasto: ${pasto}
+Objetivo: ${objetivo}
+
+Analise a situação e responda chamando o produtor de Sr. ${nome}.
+
+Mostre:
+1) diagnóstico
+2) simulação de ganho
+3) impacto financeiro
+`
+        }
+
+      ]
+
+    });
+
+    res.json({
+      reply: completion.choices[0].message.content
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({ error: "Erro ao gerar diagnóstico" });
+
+  }
+
+});
+
+
+/****************************************************************
+CONTINUAÇÃO DA CONVERSA (CHAT)
+****************************************************************/
+
+app.post("/chat", async (req, res) => {
+
+  try {
+
+    const { pergunta } = req.body;
+
+    const completion = await openai.chat.completions.create({
+
+      model: "gpt-4o-mini",
+
+      messages: [
+
+        {
+          role: "system",
+          content: `
+Você é Ari, consultor técnico da Ariel Nutrição Animal.
+
+Fale como técnico de campo experiente.
+Ajude o produtor a melhorar ganho de peso e lucro.
+
+Sempre responda de forma prática e objetiva.
+`
         },
 
         {
@@ -214,20 +256,11 @@ Faça o diagnóstico técnico seguindo as regras do Ari.
 
     console.error(error);
 
-    res.status(500).json({
-      error: "Erro ao gerar diagnóstico"
-    });
+    res.status(500).json({ error: "Erro ao continuar conversa" });
 
   }
 
 });
-
-/*
-========================================
-START DO SERVIDOR
-========================================
-*/
-
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
