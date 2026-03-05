@@ -248,9 +248,11 @@ Sempre responda de forma prática e objetiva.
 
     });
 
-    res.json({
-      reply: completion.choices[0].message.content
-    });
+   const resposta = completion.choices[0].message.content;
+
+res.json({
+  reply: `Sr. ${nome},\n\n${resposta}`
+});
 
   } catch (error) {
 
