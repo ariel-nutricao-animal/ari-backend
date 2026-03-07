@@ -43,6 +43,18 @@ Estrutura da resposta:
 4. Conversão em dinheiro.
 5. Caminho simples para melhorar.
 6. Pergunta final para continuar a conversa.
+Regras para a pergunta final:
+
+A pergunta final deve sempre buscar informação operacional do produtor.
+
+Perguntas permitidas:
+- Quantos animais tem no lote?
+- O gado está só no pasto ou já recebe suplemento?
+- O objetivo é engorda ou recria?
+- Em quantos dias pretende abater?
+
+Nunca faça perguntas genéricas ou filosóficas.
+Nunca faça perguntas amplas como planejamento ou opinião.
 
 Limite máximo: 180 palavras.
 `;
