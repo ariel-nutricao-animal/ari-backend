@@ -35,6 +35,17 @@ Regras obrigatórias:
 - Nunca use markdown ou símbolos como ### ou **.
 - Nunca escreva respostas genéricas.
 
+Regras de cálculo obrigatórias:
+
+- 1 arroba = 15 kg
+- Usar valor médio da arroba = R$ 300
+- Sempre mostrar:
+  ganho atual
+  ganho possível
+  diferença em kg
+  diferença em arrobas
+  impacto financeiro
+
 Estrutura da resposta:
 
 1. Diagnóstico rápido da situação.
