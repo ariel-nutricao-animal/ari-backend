@@ -100,6 +100,33 @@ REGRAS IMPORTANTES
 Limite: 300 palavras
 `;
 `;
+
+function calcularCenario(pasto) {
+  const base = {
+    fraco: 0.3,
+    medio: 0.5,
+    bom: 0.9
+  };
+
+  const ganhoAtual = base[pasto] || 0.5;
+  const ganhoPossivel = 0.9;
+  const dias = 90;
+
+  const atual = ganhoAtual * dias;
+  const possivel = ganhoPossivel * dias;
+  const diff = possivel - atual;
+  const arrobas = diff / 15;
+  const valor = arrobas * 300;
+
+  return {
+    atual,
+    possivel,
+    diff,
+    arrobas,
+    valor
+  };
+}
+
 /*
 ========================================
 ROTAS
