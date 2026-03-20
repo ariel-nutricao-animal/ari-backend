@@ -125,7 +125,23 @@ Diferença: ${calc.diff} kg
 Equivalente: ${calc.arrobas.toFixed(1)} arrobas
 Valor estimado: R$ ${calc.valor.toFixed(0)}
 
-Explique isso de forma simples para o produtor.
+Explique isso como um técnico de fazenda, mostrando a conta passo a passo.
+
+Obrigatório:
+
+- Mostre o ganho por dia atual
+- Mostre o ganho possível por dia
+- Mostre a conta dos 90 dias (multiplicando)
+- Mostre a diferença em kg
+- Converta para arrobas (dividindo por 15)
+- Converta para dinheiro (multiplicando por 300)
+
+Fale as contas no meio da explicação, como se estivesse conversando no curral.
+
+Exemplo de como falar:
+"Hoje você tá ganhando 0,3 kg por dia. Em 90 dias isso dá 27 kg."
+
+Não resuma. Não pule conta. Mostre tudo.
 `;
 
 /*
