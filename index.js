@@ -108,24 +108,25 @@ function calcularCenario(pasto) {
     bom: 0.9
   };
 
-  const ganhoAtual = base[pasto] || 0.5;
-  const ganhoPossivel = 0.9;
-  const dias = 90;
+  const calc = calcularCenario(pasto);
 
-  const atual = ganhoAtual * dias;
-  const possivel = ganhoPossivel * dias;
-  const diff = possivel - atual;
-  const arrobas = diff / 15;
-  const valor = arrobas * 300;
+const pergunta = `
+Produtor: ${nome}
+Cidade: ${cidade}
+Categoria: ${tipo}
+Peso médio: ${peso} kg
+Pasto: ${pasto}
+Objetivo: ${objetivo}
 
-  return {
-    atual,
-    possivel,
-    diff,
-    arrobas,
-    valor
-  };
-}
+Cenário calculado:
+Ganho atual em 90 dias: ${calc.atual} kg
+Ganho possível em 90 dias: ${calc.possivel} kg
+Diferença: ${calc.diff} kg
+Equivalente: ${calc.arrobas.toFixed(1)} arrobas
+Valor estimado: R$ ${calc.valor.toFixed(0)}
+
+Explique isso de forma simples para o produtor.
+`;
 
 /*
 ========================================
