@@ -53,13 +53,13 @@ Regras de cálculo:
 Estrutura da resposta:
 
 1. Diagnóstico rápido
-2. Simulação de ganho
+2. Demonstração de ganho
 3. Conversão em arrobas
 4. Conversão em impacto financeiro
 5. Caminho para melhorar
 6. Uma pergunta final para continuar a conversa
 
-Limite máximo: 180 palavras.
+Limite máximo: 300 palavras.
 `;
 /*
 ========================================
