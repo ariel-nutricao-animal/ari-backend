@@ -97,51 +97,40 @@ REGRAS IMPORTANTES
 - Nunca responder genérico
 - Nunca deixar de falar em dinheiro
 
-Limite: 300 palavras
+Limite: 500 palavras
 `;
 `;
 
-function calcularCenario(pasto) {
-  const base = {
-    fraco: 0.3,
-    medio: 0.5,
-    bom: 0.9
-  };
-
-  const calc = calcularCenario(pasto);
+const calc = calcularCenario(pasto);
 
 const pergunta = `
 Produtor: ${nome}
-Cidade: ${cidade}
 Categoria: ${tipo}
-Peso médio: ${peso} kg
+Peso: ${peso} kg
 Pasto: ${pasto}
-Objetivo: ${objetivo}
 
-Cenário calculado:
-Ganho atual em 90 dias: ${calc.atual} kg
-Ganho possível em 90 dias: ${calc.possivel} kg
-Diferença: ${calc.diff} kg
-Equivalente: ${calc.arrobas.toFixed(1)} arrobas
-Valor estimado: R$ ${calc.valor.toFixed(0)}
+DADOS JÁ CALCULADOS (NÃO MUDE OS NÚMEROS):
 
-Explique isso como um técnico de fazenda, mostrando a conta passo a passo.
+- Ganho atual por dia: ${pasto === "fraco" ? 0.3 : pasto === "medio" ? 0.5 : 0.9} kg
+- Ganho possível por dia: 0.9 kg
 
-Obrigatório:
+- Ganho atual em 90 dias: ${calc.atual} kg
+- Ganho possível em 90 dias: ${calc.possivel} kg
 
-- Mostre o ganho por dia atual
-- Mostre o ganho possível por dia
-- Mostre a conta dos 90 dias (multiplicando)
-- Mostre a diferença em kg
-- Converta para arrobas (dividindo por 15)
-- Converta para dinheiro (multiplicando por 300)
+- Diferença: ${calc.diff} kg
+- Arrobas: ${calc.arrobas.toFixed(1)}
+- Valor: R$ ${calc.valor.toFixed(0)}
 
-Fale as contas no meio da explicação, como se estivesse conversando no curral.
+AGORA FAÇA O SEGUINTE:
 
-Exemplo de como falar:
-"Hoje você tá ganhando 0,3 kg por dia. Em 90 dias isso dá 27 kg."
+- Mostre TODAS as contas
+- Fale multiplicando (ex: 0,3 x 90)
+- Fale dividindo (ex: / 15)
+- Fale o dinheiro no final
 
-Não resuma. Não pule conta. Mostre tudo.
+PROIBIDO:
+- Resposta genérica
+- Pular conta
 `;
 
 /*
