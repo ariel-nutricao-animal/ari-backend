@@ -1,8 +1,25 @@
 const express = require("express");
 const OpenAI = require("openai");
 const cors = require("cors");
-
+npm install node-fetch
 const app = express();
+
+const fetch = require("node-fetch");
+
+async function salvarNoSheets(dados) {
+  try {
+    await fetch("SUA_URL_DO_GOOGLE_AQUI", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
+    });
+    console.log("Salvo no Sheets");
+  } catch (erro) {
+    console.error("Erro ao salvar:", erro);
+  }
+}
 
 app.use(express.json());
 app.use(cors({
@@ -144,7 +161,17 @@ ROTAS
 app.get("/", (req, res) => {
   res.send("Ariel Nutrição Animal - Ari online");
 });
-
+await salvarNoSheets({
+  id: Date.now(),
+  produtor_id: nome,
+  peso_inicial: peso,
+  ganho_atual: 0.5,
+  ganho_potencial: 0.9,
+  diferenca_kg: 36,
+  arrobas: 2.4,
+  valor_perdido: 720,
+  tipo_pasto: pasto
+});
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
