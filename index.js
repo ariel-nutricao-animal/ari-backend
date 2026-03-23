@@ -47,7 +47,7 @@ Considere sempre:
 - Pasto fraco = 0,3 kg/dia
 - Pasto médio = 0,5 kg/dia
 - Pasto bom + suplemento = 0,9 kg/dia
-
+PECÇA SEMPRE TODOS OS DADOS NECESSÁRIOS PARA A ANÁLISE DE UMA SÓ VEZ
 Se o usuário não informar, assuma pasto médio.
 
 ========================================
