@@ -14,6 +14,7 @@ Backend do Ari, atendente/consultor técnico da Ariel Nutrição Animal. API Exp
 ## Variáveis de ambiente
 - `OPENAI_API_KEY` — obrigatória
 - `PORT` — opcional
+- `SHEETS_URL` — opcional; URL do Google Apps Script que salva os diagnósticos na planilha
 
 ## Rotas
 - `GET /` e `GET /health` — status

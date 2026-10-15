@@ -1,14 +1,14 @@
 const express = require("express");
 const OpenAI = require("openai");
 const cors = require("cors");
-npm install node-fetch
+
 const app = express();
 
-const fetch = require("node-fetch");
-
 async function salvarNoSheets(dados) {
+  if (!process.env.SHEETS_URL) return;
+
   try {
-    await fetch("SUA_URL_DO_GOOGLE_AQUI", {
+    await fetch(process.env.SHEETS_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -118,39 +118,39 @@ DEPOIS QUE FORNECER O TELEFONE DO LEONARDO, ENCERRAR O DIAGNÓSTICO, AGRADECE O 
 
 Limite: 500 palavras
 `;
-`;
 
-const calc = calcularCenario(pasto);
+/*
+========================================
+CÁLCULO DO CENÁRIO (90 DIAS)
+========================================
+*/
 
-const pergunta = `
-Produtor: ${nome}
-Categoria: ${tipo}
-Peso: ${peso} kg
-Pasto: ${pasto}
+const GANHO_POR_PASTO = { fraco: 0.3, medio: 0.5, bom: 0.9 };
+const GANHO_POSSIVEL = 0.9;
+const DIAS = 90;
+const KG_POR_ARROBA = 15;
+const VALOR_ARROBA = 300;
 
-DADOS JÁ CALCULADOS (NÃO MUDE OS NÚMEROS):
+function normalizarPasto(pasto) {
+  const p = String(pasto || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+  if (p.includes("fraco")) return "fraco";
+  if (p.includes("bom")) return "bom";
+  return "medio";
+}
 
-- Ganho atual por dia: ${pasto === "fraco" ? 0.3 : pasto === "medio" ? 0.5 : 0.9} kg
-- Ganho possível por dia: 0.9 kg
-
-- Ganho atual em 90 dias: ${calc.atual} kg
-- Ganho possível em 90 dias: ${calc.possivel} kg
-
-- Diferença: ${calc.diff} kg
-- Arrobas: ${calc.arrobas.toFixed(1)}
-- Valor: R$ ${calc.valor.toFixed(0)}
-
-AGORA FAÇA O SEGUINTE:
-
-- Mostre TODAS as contas
-- Fale multiplicando (ex: 0,3 x 90)
-- Fale dividindo (ex: / 15)
-- Fale o dinheiro no final
-
-PROIBIDO:
-- Resposta genérica
-- Pular conta
-`;
+function calcularCenario(pasto) {
+  const ganhoDia = GANHO_POR_PASTO[normalizarPasto(pasto)];
+  const atual = +(ganhoDia * DIAS).toFixed(1);
+  const possivel = +(GANHO_POSSIVEL * DIAS).toFixed(1);
+  const diff = +(possivel - atual).toFixed(1);
+  const arrobas = diff / KG_POR_ARROBA;
+  const valor = arrobas * VALOR_ARROBA;
+  return { ganhoDia, atual, possivel, diff, arrobas, valor };
+}
 
 /*
 ========================================
@@ -161,17 +161,7 @@ ROTAS
 app.get("/", (req, res) => {
   res.send("Ariel Nutrição Animal - Ari online");
 });
-await salvarNoSheets({
-  id: Date.now(),
-  produtor_id: nome,
-  peso_inicial: peso,
-  ganho_atual: 0.5,
-  ganho_potencial: 0.9,
-  diferenca_kg: 36,
-  arrobas: 2.4,
-  valor_perdido: 720,
-  tipo_pasto: pasto
-});
+
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
@@ -221,6 +211,8 @@ app.post("/diagnostico", async (req, res) => {
 
     const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
 
+    const calc = calcularCenario(pasto);
+
     const pergunta = `
 Produtor: ${nome}
 Cidade: ${cidade}
@@ -229,8 +221,43 @@ Peso médio: ${peso} kg
 Pasto: ${pasto}
 Objetivo: ${objetivo}
 
-Analise a situação e responda chamando o produtor de Sr. ${nome}.
+DADOS JÁ CALCULADOS (NÃO MUDE OS NÚMEROS):
+
+- Ganho atual por dia: ${calc.ganhoDia} kg
+- Ganho possível por dia: ${GANHO_POSSIVEL} kg
+
+- Ganho atual em ${DIAS} dias: ${calc.atual} kg
+- Ganho possível em ${DIAS} dias: ${calc.possivel} kg
+
+- Diferença: ${calc.diff} kg
+- Arrobas: ${calc.arrobas.toFixed(1)}
+- Valor: R$ ${calc.valor.toFixed(0)}
+
+AGORA FAÇA O SEGUINTE:
+
+- Responda chamando o produtor de Sr. ${nome}
+- Mostre TODAS as contas
+- Fale multiplicando (ex: ${calc.ganhoDia} x ${DIAS})
+- Fale dividindo (ex: / ${KG_POR_ARROBA})
+- Fale o dinheiro no final
+
+PROIBIDO:
+- Resposta genérica
+- Pular conta
 `;
+
+    salvarNoSheets({
+      id: Date.now(),
+      produtor_id: nome,
+      cidade,
+      peso_inicial: peso,
+      ganho_atual: calc.ganhoDia,
+      ganho_potencial: GANHO_POSSIVEL,
+      diferenca_kg: calc.diff,
+      arrobas: +calc.arrobas.toFixed(1),
+      valor_perdido: Math.round(calc.valor),
+      tipo_pasto: pasto,
+    });
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
