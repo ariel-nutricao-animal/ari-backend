@@ -4,6 +4,12 @@ const cors = require("cors");
 
 const app = express();
 
+/* O Apps Script do Google às vezes demora ou simplesmente não responde.
+   Dez segundos de paciência e nada mais: o diagnóstico do produtor não pode
+   ficar esperando a planilha. O erro é anotado no log e engolido de propósito
+   - perder a linha da planilha é ruim, mas derrubar a resposta é pior. */
+const PRAZO_SHEETS_MS = 10000;
+
 async function salvarNoSheets(dados) {
   if (!process.env.SHEETS_URL) return;
 
@@ -13,7 +19,8 @@ async function salvarNoSheets(dados) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(dados),
+      signal: AbortSignal.timeout(PRAZO_SHEETS_MS)
     });
     console.log("Salvo no Sheets");
   } catch (erro) {
@@ -209,7 +216,21 @@ DIAGNÓSTICO DO SITE
 app.post("/diagnostico", async (req, res) => {
   try {
 
-    const { nome, cidade, tipo, peso, pasto, objetivo } = req.body;
+    const { nome, cidade, tipo, peso, pasto, objetivo } = req.body || {};
+
+    /* Sem nome, cidade e peso não há diagnóstico - e, pior, uma linha em
+       branco com números inventados ia parar na planilha. Já aconteceu em
+       teste: corpo vazio gerava R$ 720 de prejuízo para ninguém. */
+    const faltando = [];
+    if (!String(nome || "").trim()) faltando.push("nome");
+    if (!String(cidade || "").trim()) faltando.push("cidade");
+    if (!(Number(peso) > 0)) faltando.push("peso");
+
+    if (faltando.length) {
+      return res.status(400).json({
+        error: "Faltou informar: " + faltando.join(", ")
+      });
+    }
 
     const calc = calcularCenario(pasto);
 
@@ -246,7 +267,11 @@ PROIBIDO:
 - Pular conta
 `;
 
-    salvarNoSheets({
+    /* As duas chamadas saem juntas para não somar espera, mas a resposta só
+       vai embora depois que a planilha confirmou. No Cloud Run o processador
+       é cortado assim que a resposta sai: gravação solta aqui era linha
+       perdida sem ninguém ficar sabendo. */
+    const gravando = salvarNoSheets({
       id: Date.now(),
       produtor_id: nome,
       cidade,
@@ -259,13 +284,16 @@ PROIBIDO:
       tipo_pasto: pasto,
     });
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: DNA_ARI },
-        { role: "user", content: pergunta },
-      ],
-    });
+    const [, completion] = await Promise.all([
+      gravando,
+      openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: DNA_ARI },
+          { role: "user", content: pergunta },
+        ],
+      }),
+    ]);
 
     res.json({
       reply: completion.choices[0].message.content,
